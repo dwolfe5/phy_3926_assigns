@@ -129,3 +129,65 @@ plt.xlabel('Time')
 plt.ylabel('x')
 plt.title('Temperature contour plot')
 plt.show()
+
+# Set parameters for reproducing Figure 6.8
+
+tau8 = 1.5e-4 # Given in figure
+
+args8 = [1.0, 1.0] 
+
+ntime8 = int(0.06 // tau7)         
+
+nspace8 = 61 # Given in figure   
+
+h8 = args8[0] / ( nspace8 - 1 )           
+
+tau_rel8 = tau8 * ( 2 * args8[1] ) / (h8 ** 2) 
+
+ 
+
+xplot8, tplot8, ttplot8 = diffusion_ftcs(nspace8, ntime8, tau_rel8, args8)
+
+ 
+
+print(tau_rel8)
+
+print(tau7)
+
+ 
+
+# Plot the results to show instability
+
+fig4 = plt.figure()
+
+ax = fig4.add_subplot(projection='3d')
+
+Tp, Xp = np.meshgrid(tplot8, xplot8)
+
+ax.plot_surface(Tp, Xp, ttplot8, rstride=2, cstride=2, cmap=cm.gray)
+
+ax.set_xlabel('Time')
+
+ax.set_ylabel('x')
+
+ax.set_zlabel('T(x,t)')
+
+ax.set_title('Diffusion of a delta spike')
+
+ 
+
+fig5 = plt.figure()
+
+levels8 = np.linspace(0., 10., num=21)
+
+ct8 = plt.contour(tplot8, xplot8, ttplot8, levels8)
+
+plt.clabel(ct, fmt='%1.2f')
+
+plt.xlabel('Time')
+
+plt.ylabel('x')
+
+plt.title('Temperature contour plot')
+
+plt.show()
