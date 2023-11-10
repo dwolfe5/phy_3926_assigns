@@ -92,3 +92,40 @@ plt.xlabel('Time')
 plt.ylabel('x')
 plt.title('Temperature contour plot')
 plt.show()
+
+# PART 2
+
+from matplotlib import cm
+from mpl_toolkits.mplot3d import Axes3D
+
+# Set parameters for reproducing Figure 6.7
+tau7 = 1e-4 # Given in figure
+args7 = [1.0, 1.0]  
+ntime7 = int(0.03 // tau7)          
+nspace7 = 61 # Given in figure    
+h7 = args7[0] / ( nspace7 - 1 )            
+tau_rel7 = tau7 * ( 2 * args7[1] ) / (h7 ** 2)                
+
+xplot7, tplot7, ttplot7 = diffusion_ftcs(nspace7, ntime7, tau_rel7, args7)
+
+# print(tau_rel7)
+# print(tau7)
+
+# Plot the results as a contour plot
+fig2 = plt.figure()
+ax = fig2.add_subplot(projection='3d')
+Tp, Xp = np.meshgrid(tplot7, xplot7)
+ax.plot_surface(Tp, Xp, ttplot7, rstride=2, cstride=2, cmap=cm.gray)
+ax.set_xlabel('Time')
+ax.set_ylabel('x')
+ax.set_zlabel('T(x,t)')
+ax.set_title('Diffusion of a delta spike')
+
+fig3 = plt.figure()
+levels7 = np.linspace(0., 10., num=21)
+ct7 = plt.contour(tplot7, xplot7, ttplot7, levels7)
+plt.clabel(ct, fmt='%1.2f')
+plt.xlabel('Time')
+plt.ylabel('x')
+plt.title('Temperature contour plot')
+plt.show()
