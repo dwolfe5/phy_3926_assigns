@@ -4,19 +4,35 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
+# Members: Shane, Ashton, Robbie, Dakota
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
 # Part 1 - Shane, Ashton
 
 def traffic_advection(N, L, vmax, nstep):
+   
     '''
-    N = Number of grid points
-    L = System size (m)
-    vmax = max speed of cars (m/s)
-    nstep = number of steps
+    Function Description: function that solves the advection equation for the time evolution of car number
+    density (cars per unit length) using the Lax method.
+    ------------------------------------------------------------------------------------------------------------
+    Parameters:
+    ------------------------------------------------------------------------------------------------------------
+    N : int
+        number of grid points
+    L : float
+        system size (m)
+    vmax : float
+        max speed of cars (m/s)
+    nstep : float
+        number of steps
     '''    
-    # Grid spacing for periodic boundary conditions
-    h = L / N
+ 
+    h = L / N # Grid spacing for periodic boundary conditions
     tau = h / vmax  # Maximum car speed (m/s)
-    coeff = tau / (2 * h)  # Coefficient used by all schemes
+    coeff = tau / (2 * h)  # Coefficient used by Lax method
 
     # Set initial and boundary conditions
     rho_max = 1.0  # Maximum density
@@ -25,8 +41,8 @@ def traffic_advection(N, L, vmax, nstep):
     for i in range(int(N / 4), int(N / 2)):
         rho[i] = rho_max  # Max density in the square pulse
 
-    rho[int(N / 2)] = rho_max / 2  # Try running without this line
-
+    rho[int(N / 2)] = rho_max / 2 
+   
     ip = np.arange(N) + 1
     ip[N - 1] = 0  # ip = i+1 with periodic b.c.
     im = np.arange(N) - 1
@@ -53,7 +69,7 @@ def traffic_advection(N, L, vmax, nstep):
     return xplot, tplot, rplot, iplot
 
 
-# Part 2 - Robbie, Dakota 
+# Part 2 - Robbie, Dakota
 
 def plot_traffic_results(xplot, tplot, rplot, iplot):
 
