@@ -1,1 +1,103 @@
+# Members: Shane, Ashton, Robbie, Dakota
+
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
+# Part 1 - Shane, Ashton
+
+def traffic_advection(N, L, vmax, nstep):
+    '''
+    N = Number of grid points
+    L = System size (m)
+    vmax = max speed of cars (m/s)
+    nstep = number of steps
+    '''    
+    # Grid spacing for periodic boundary conditions
+    h = L / N
+    tau = h / vmax  # Maximum car speed (m/s)
+    coeff = tau / (2 * h)  # Coefficient used by all schemes
+
+    # Set initial and boundary conditions
+    rho_max = 1.0  # Maximum density
+    Flow = np.empty(N)
+    rho = np.zeros(N)
+    for i in range(int(N / 4), int(N / 2)):
+        rho[i] = rho_max  # Max density in the square pulse
+
+    rho[int(N / 2)] = rho_max / 2  # Try running without this line
+
+    ip = np.arange(N) + 1
+    ip[N - 1] = 0  # ip = i+1 with periodic b.c.
+    im = np.arange(N) - 1
+    im[0] = N - 1  # im = i-1 with periodic b.c.
+
+    # Initialize plotting variables.
+    iplot = 1
+    xplot = (np.arange(N) - 1 / 2.) * h - L / 2.  # Record x scale for plot
+    rplot = np.empty((N, nstep + 1))
+    tplot = np.empty(nstep + 1)
+    rplot[:, 0] = np.copy(rho)  # Record the initial state
+    tplot[0] = 0  # Record the initial time (t=0)
+
+    # Loop over the desired number of steps (Lax Method)
+    for istep in range(nstep):
+        Flow[:] = rho[:] * (vmax * (1 - rho[:] / rho_max))
+        rho[:] = .5 * (rho[ip] + rho[im]) - coeff * (Flow[ip] - Flow[im])
+
+        # Record density for plotting.
+        rplot[:, iplot] = np.copy(rho)
+        tplot[iplot] = tau * (istep + 1)
+        iplot += 1
+
+    return xplot, tplot, rplot, iplot
+
+
+# Part 2 - Robbie, Dakota 
+
+def plot_traffic_results(xplot, tplot, rplot, iplot):
+
+    '''
+    Function Descriotion: Plot contours of density versus position and time, and creates a density snapshot plot.
+    ------------------------------------------------------------------------------------------------------------
+    Parameters:
+    ------------------------------------------------------------------------------------------------------------
+    xplot : array
+        x scale for plot.
+    tplot : array
+        Time values.
+    rplot : array
+        Density values at each grid point and time step.
+    iplot : int
+        Number of time steps.
+
+    '''
+
+    # Graph contours of density versus position and time
+    levels = np.linspace(0., 1., num=11)
+    ct = plt.contour(xplot, tplot, np.flipud(np.rot90(rplot)), levels)
+    plt.clabel(ct, fmt='%1.2f')
+    plt.xlabel('x')
+    plt.ylabel('time')
+    plt.title('Density contours')
+    plt.show()
+
+    # Snapshot plot
+    snapshot_times = [0, 0.2, 0.4, 0.6, 0.8, 1.0]  # Adjust as needed
+    for time in snapshot_times:
+        index = int(time / (tplot[-1] / iplot))
+        plt.plot(xplot, rplot[:, index], label=f'time = {time:.2f}')
+    plt.xlabel('x')
+    plt.ylabel('Density')
+    plt.title('Density Snapshot')
+    plt.legend()
+    plt.show()
+
+# Numerical parameters (time step, grid spacing, etc.).
+N, L , vmax, nstep = 600, 1200, 25., 1500  # Grid spaces, system size, maximum car speed, number of time steps
+
+# Solves the traffic advection equation using the chosen method as well as parameters just defined
+xplot, tplot, rplot, iplot = traffic_advection(N, L, vmax, nstep)
+
+# Call the plot function to produce contour plot and snapshot
+plot_traffic_results(xplot, tplot, rplot, iplot)
