@@ -4,12 +4,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-# Members: Shane, Ashton, Robbie, Dakota
-
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
-
 # Part 1 - Shane, Ashton
 
 def traffic_advection(N, L, vmax, nstep):
