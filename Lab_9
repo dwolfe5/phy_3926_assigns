@@ -1,4 +1,4 @@
-# Members: Shane, Ashton, Robbie, Dakota
+# Members: Shane, Ashton, Robert, Dakota
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -63,7 +63,7 @@ def traffic_advection(N, L, vmax, nstep):
     return xplot, tplot, rplot, iplot
 
 
-# Part 2 - Robbie, Dakota
+# Part 2 - Robert, Dakota
 
 def plot_traffic_results(xplot, tplot, rplot, iplot):
 
@@ -93,7 +93,7 @@ def plot_traffic_results(xplot, tplot, rplot, iplot):
     plt.show()
 
     # Snapshot plot
-    snapshot_times = [0, 0.2, 0.4, 0.6, 0.8, 1.0]  # Adjust as needed
+    snapshot_times = [0, 15, 20, 60, 100]
     for time in snapshot_times:
         index = int(time / (tplot[-1] / iplot))
         plt.plot(xplot, rplot[:, index], label=f'time = {time:.2f}')
@@ -111,3 +111,12 @@ xplot, tplot, rplot, iplot = traffic_advection(N, L, vmax, nstep)
 
 # Call the plot function to produce contour plot and snapshot
 plot_traffic_results(xplot, tplot, rplot, iplot)
+
+
+'''
+Due to a discontinuity in the initial conditions for traffic density, there is a shock front in the traffic that exists from the start at t = 0.
+However, this shock front is mostly stationary until about t = 18s when it begins to move in the positive x direction.
+This can be seen in the contour plot, but also in the snapshots; at t = 15s, the left boundary of the traffic density (the discontinuity) is still 
+roughly aligned with the initial, but by t = 20s it has begun moving in the +x direction.
+
+'''
